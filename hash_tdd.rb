@@ -162,8 +162,8 @@ class HashTest < Test::Unit::TestCase
     h.set_value(key2, 'value2')
     h.set_value(key2, 'value3')
     assert_equal 'value3', h.get_value(key2)
-    h.set_value(key1, 'value3')
-    assert_equal 'value3', h.get_value(key1)
+    h.set_value(key2, 'value4')
+    assert_equal 'value4', h.get_value(key2)
   end
 
 end
