@@ -157,13 +157,15 @@ class HashTest < Test::Unit::TestCase
 
   def test_update_collision_pair
     h = FakeHash.new(200)
-    key1 = 'ag'; key2 = 'bf'
+    key1 = 'ag'; key2 = 'bf'; key3 = 'ce'
     h.set_value(key1, 'value1')
     h.set_value(key2, 'value2')
     h.set_value(key2, 'value3')
     assert_equal 'value3', h.get_value(key2)
-    h.set_value(key2, 'value4')
-    assert_equal 'value4', h.get_value(key2)
+    h.set_value(key3, 'ce_value')
+    h.set_value(key3, 'ce_value2')
+    assert_equal 'value3', h.get_value(key2)
+    assert_equal 'ce_value2', h.get_value(key3)
   end
 
 end
