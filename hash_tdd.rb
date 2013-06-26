@@ -15,7 +15,14 @@ class FakeHash
     key = key.to_s unless key.kind_of? String
     index = convert_to_index(key)
     return @body[index] = [key, value] unless @body[index]
-    @body[index][0] == key ? @body[index][1] = value : @body[index].push([key, value])
+
+    if @body[index][0] == key
+      @body[index][1] = value
+    elsif get_collision_pair_index(key, index)
+      @body[index][get_collision_pair_index(key, index)][1] = value
+    else
+      @body[index].push([key, value])
+    end
   end
 
   def get_value(key)
@@ -56,6 +63,7 @@ private
     @body[index].each_with_index do |pair, index|
       return index if pair[0] == key
     end
+    nil
   end
 end
 
@@ -145,6 +153,17 @@ class HashTest < Test::Unit::TestCase
     @hash.delete_pair(key2)
     assert_nil @hash.get_value(key3)
     assert_nil @hash.get_value(key2)
+  end
+
+  def test_update_collision_pair
+    h = FakeHash.new(200)
+    key1 = 'ag'; key2 = 'bf'
+    h.set_value(key1, 'value1')
+    h.set_value(key2, 'value2')
+    h.set_value(key2, 'value3')
+    assert_equal 'value3', h.get_value(key2)
+    h.set_value(key1, 'value3')
+    assert_equal 'value3', h.get_value(key1)
   end
 
 end
